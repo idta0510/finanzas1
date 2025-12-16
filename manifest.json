@@ -7,7 +7,7 @@
     "theme_color": "#0b1220",
     "icons": [
         {
-            "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAHUlEQVR4nO3BMQEAAADCoPVPbQ0PoAAAAAAAAAA4GkU5AAE7fU1AAAAAElFTkSuQmCC",
+            "src": "./Terry-logo.png",
             "sizes": "192x192",
             "type": "image/png"
         }
