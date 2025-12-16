@@ -210,7 +210,7 @@ function renderBudgetGrid(budgetMap, spentMap) {
         <div class="mini">
           <span>Gastado: <b style="color:var(--text)">${formatCLP(spent)}</b></span>
           <span>Presupuesto:</span>
-          <input data-budget-cat="${cat}" type="number" min="0" step="50" inputmode="numeric"
+          <input data-budget-cat="${cat}" type="number" min="0" step="1" inputmode="numeric"
                  value="${budget}" style="width:140px" />
         </div>
       </div>
