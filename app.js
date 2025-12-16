@@ -15,7 +15,8 @@ const monthKeys = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2,
 // Categorías exactas que pediste
 const CATEGORIES = [
     "Sueldo", "Arriendo", "Transporte", "Luz", "Agua", "Gas",
-    "Mercaderia", "ChatGPT", "Spotify",
+    "Mercadería", "Hormiga", "Streaming", "Pago CMR", "Ocio", "Gimnasio",
+    "ChatGPT", "Spotify", "Ropa",
     "Ahorro", "Otros"
 ];
 
@@ -40,6 +41,7 @@ const kpiAccum = $("kpiAccum");
 
 const chartSavingsByMonth = $("chartSavingsByMonth");
 const chartIncomeExpenseMonth = $("chartIncomeExpenseMonth");
+const chartPieDash = $("chartPieDash");
 
 // Movimientos controls
 const yearInputMov = $("yearInputMov");
@@ -369,7 +371,26 @@ async function refreshDashboard() {
     setKpiColor(kpiAccum, accumYear);
 
     drawDashboardCharts(annual, monthSummary);
+    drawDashboardPie(monthRows);
     statusLine.textContent = "✅ BD local activa (IndexedDB) · Offline listo";
+}
+
+function drawDashboardPie(rows) {
+    const spent = expensesByCategory(rows);
+    const items = CATEGORIES.map((cat, i) => ({
+        label: cat,
+        value: spent.get(cat) || 0,
+        color: palette(i)
+    })).filter(it => it.value > 0);
+
+    if (items.length === 0) {
+        const ctx = chartPieDash.getContext("2d");
+        ctx.clearRect(0, 0, chartPieDash.width, chartPieDash.height);
+        return;
+    }
+    // Reutilizamos drawPieAndBars o creamos uno nuevo. 
+    // Usaremos drawPieAndBars que ya existe en charts.js y es lo que pide el usuario (torta).
+    drawPieAndBars(chartPieDash, items, "Gastos por categoría");
 }
 
 async function refreshMovimientos() {

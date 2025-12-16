@@ -489,34 +489,43 @@ canvas {
 /* Mobile enhancements */
 @media (max-width: 600px) {
     body {
-        font-size: 14px; /* slightly smaller text base */
-    }
-    
-    .topbar {
-        flex-wrap: wrap; /* allow wrapping */
-        padding: 10px 12px;
-    }
-    
-    .topbar__left {
-        width: 100%;
-        margin-bottom: 8px; /* space between title and actions */
-    }
-    
-    .topbar__right {
-        width: 100%;
-        justify-content: space-between; /* spread buttons */
+        font-size: 14px;
+        /* slightly smaller text base */
     }
 
-    .btn, input, select {
-        min-height: 44px; /* touch target size */
+    .topbar {
+        flex-wrap: wrap;
+        /* allow wrapping */
+        padding: 10px 12px;
+    }
+
+    .topbar__left {
+        width: 100%;
+        margin-bottom: 8px;
+        /* space between title and actions */
+    }
+
+    .topbar__right {
+        width: 100%;
+        justify-content: space-between;
+        /* spread buttons */
+    }
+
+    .btn,
+    input,
+    select {
+        min-height: 44px;
+        /* touch target size */
     }
 
     .card {
-        padding: 12px; /* reduced padding */
+        padding: 12px;
+        /* reduced padding */
     }
 
     .card__head h2 {
-        width: 100%; /* title full width */
+        width: 100%;
+        /* title full width */
         margin-bottom: 8px;
     }
 
@@ -525,17 +534,36 @@ canvas {
     }
 
     .field--mini {
-        min-width: calc(50% - 6px); /* 2 per row */
+        min-width: calc(50% - 6px);
+        /* 2 per row */
         flex: 1;
     }
-    
+
     .kpis {
-        grid-template-columns: 1fr; /* 1 column KPIs on very small screens */
+        grid-template-columns: 1fr;
+        /* 1 column KPIs on very small screens */
     }
 
     .budgetRowTop .mini {
         width: 100%;
         margin-top: 4px;
+    }
+
+    /* Mejora especifica para tablas en movil */
+    .table th,
+    .table td {
+        padding: 8px 6px;
+        font-size: 12px;
+    }
+
+    .chartCard {
+        padding: 8px;
+        /* menos padding para ganar espacio al grafico */
+    }
+
+    /* Ajuste para titulo muy largo en Ahorro */
+    .kpi__label {
+        font-size: 11px;
     }
 }
 
@@ -569,20 +597,21 @@ canvas {
     }
 
     .table {
-        min-width: 600px; /* reduce min-width slightly */
+        min-width: 600px;
+        /* reduce min-width slightly */
     }
-    
+
     /* Make pills more compact */
     .pills {
         gap: 6px;
     }
-    
+
     .pill {
         min-width: auto;
         flex: 1;
         padding: 6px 8px;
     }
-    
+
     .pill b {
         font-size: 14px;
     }
