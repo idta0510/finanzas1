@@ -1,4 +1,4 @@
-const CACHE_NAME = "finanzas-pwa-v5";
+const CACHE_NAME = "finanzas-pwa-v6";
 const ASSETS = [
     "./",
     "./index.html",
@@ -6,6 +6,7 @@ const ASSETS = [
     "./app.js",
     "./db.js",
     "./charts.js",
+    "./ui.js",
     "./manifest.json"
 ];
 

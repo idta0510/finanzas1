@@ -5,6 +5,8 @@ import {
     exportYearToJSON, importFromJSON
 } from "./db.js";
 
+import { showToast } from "./ui.js";
+
 import {
     drawBarLineSavings, drawTwoBars, drawPieAndBars, palette
 } from "./charts.js";
@@ -505,7 +507,7 @@ function wireForms() {
         const amount = Number(fAmount.value);
 
         if (!date || !type || !category || !Number.isFinite(amount) || amount <= 0) {
-            alert("Completa fecha, tipo, categoría y monto (>0).");
+            showToast("Completa fecha, tipo, categoría y monto (>0).", "warning");
             return;
         }
 
@@ -537,7 +539,7 @@ function wireForms() {
     btnSaveBudgets.addEventListener("click", async () => {
         await saveBudgetsForSelectedMonth();
         await refreshMovimientos();
-        alert("Presupuestos guardados ✅");
+        showToast("Presupuestos guardados ✅", "success");
     });
 }
 
@@ -581,12 +583,12 @@ function wireExportImport() {
             const payload = JSON.parse(text);
             await importFromJSON(payload);
 
-            alert("Importación lista ✅");
+            showToast("Importación lista ✅", "success");
             await refreshDashboard();
             await refreshMovimientos();
             await refreshAhorro();
         } catch (err) {
-            alert("No se pudo importar: " + (err?.message || err));
+            showToast("No se pudo importar: " + (err?.message || err), "error");
         } finally {
             importFile.value = "";
         }
