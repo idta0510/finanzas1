@@ -195,6 +195,7 @@ function expensesByCategory(rows) {
     return map;
 }
 
+
 function renderBudgetGrid(budgetMap, spentMap) {
     budgetGrid.innerHTML = "";
 
@@ -279,6 +280,39 @@ function renderMovementsTable(rows) {
             await refreshAhorro();      // mantiene ahorro al día
         });
     });
+}
+
+function renderMovementsCards(rows) {
+    const container = document.getElementById("cardsContainer");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    const sorted = rows.slice().sort((a, b) => (a.date || "").localeCompare(b.date || ""));
+
+    for (const r of sorted) {
+        const card = document.createElement("div");
+        card.className = `moveCard ${r.type === "Ingreso" ? "income" : "expense"}`;
+
+        const safeDesc = (r.description || "")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;");
+
+        const sign = r.type === "Ingreso" ? "" : "- ";
+
+        card.innerHTML = `
+            <div class="moveCardTop">
+                <span>${r.category}</span>
+                <span>${sign}${formatCLP(r.amount)}</span>
+            </div>
+            <div class="moveCardBottom">
+                <span>${safeDesc}</span>
+                <span>${r.date || "-"}</span>
+            </div>
+        `;
+
+        container.appendChild(card);
+    }
 }
 
 function renderAnnualTableSav(annual) {
@@ -406,6 +440,7 @@ async function refreshMovimientos() {
     mSaving.style.color = s.saving >= 0 ? "var(--good)" : "var(--bad)";
 
     renderMovementsTable(rows);
+    renderMovementsCards(rows);
 
     // budgets
     const budRows = await getBudgetsByYearMonth(year, month);
