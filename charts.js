@@ -221,7 +221,18 @@ export function drawPieAndBars(canvas, items, title) {
         ctx.arc(cx, cy, rInner, start + ang, start, true);
         ctx.closePath();
 
+        // Base color
         ctx.fillStyle = it.color;
+        ctx.fill();
+
+        // Gradient Overlay (Depth effect)
+        // From inner radius (transparent) to outer radius (darker)
+        // This gives a nice 3D "rounded" look to each color
+        const grad = ctx.createRadialGradient(cx, cy, rInner, cx, cy, rOuter);
+        grad.addColorStop(0, "rgba(255,255,255, 0.05)"); // Slight highlight inside
+        grad.addColorStop(1, "rgba(0,0,0, 0.25)");       // Shadow outside
+
+        ctx.fillStyle = grad;
         ctx.fill();
 
         // Optional: small separator
