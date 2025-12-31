@@ -308,16 +308,38 @@ export function drawPieAndBars(canvas, items, title) {
 
 export function palette(i) {
     const colors = [
-        "rgba(96,165,250,0.9)",
-        "rgba(34,197,94,0.85)",
-        "rgba(251,146,60,0.85)",
-        "rgba(239,68,68,0.85)",
-        "rgba(168,85,247,0.85)",
-        "rgba(250,204,21,0.85)",
-        "rgba(56,189,248,0.85)",
-        "rgba(244,114,182,0.85)",
-        "rgba(74,222,128,0.85)",
-        "rgba(203,213,225,0.85)"
+        // Azul financiero
+        "rgba(59,130,246,0.95)",
+        "rgba(59,130,246,0.55)",
+
+        // Azul oscuro
+        "rgba(37,99,235,0.95)",
+        "rgba(37,99,235,0.55)",
+
+        // Rojo egresos
+        "rgba(220,38,38,0.95)",
+        "rgba(220,38,38,0.55)",
+
+        // Rojo oscuro
+        "rgba(153,27,27,0.95)",
+        "rgba(153,27,27,0.55)",
+
+        // Naranjo gasto
+        "rgba(249,115,22,0.95)",
+        "rgba(249,115,22,0.55)",
+
+        // Ámbar
+        "rgba(217,119,6,0.95)",
+        "rgba(217,119,6,0.55)",
+
+        // Morado
+        "rgba(139,92,246,0.95)",
+        "rgba(139,92,246,0.55)",
+
+        // Gris financiero
+        "rgba(100,116,139,0.95)",
+        "rgba(100,116,139,0.55)"
     ];
+
     return colors[i % colors.length];
 }
