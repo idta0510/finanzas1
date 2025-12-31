@@ -183,59 +183,115 @@ export function drawPieAndBars(canvas, items, title) {
     const W = canvas.width, H = canvas.height;
     clear(ctx, W, H);
 
+    // BACKGROUND
     ctx.fillStyle = "rgba(2,6,23,0.35)";
     roundRect(ctx, 0, 0, W, H, 12);
     ctx.fill();
 
+    // TITLE
     ctx.fillStyle = "rgba(156,163,175,0.92)";
-    ctx.font = "12px system-ui";
-    ctx.fillText(title || "", 14, 20);
+    ctx.font = "14px system-ui";
+    ctx.fillText(title || "", 18, 24);
 
     const total = items.reduce((s, it) => s + (Number(it.value) || 0), 0) || 1;
 
-    // pie area (left)
-    const cx = 150;
+    // --- DONUT CONFIG ---
+    // Moved center slightly right to 200 (was 150)
+    // Increased radius to 135 (was 110)
+    const cx = 200;
     const cy = H / 2 + 10;
-    const r = Math.min(110, H / 2 - 20);
+    const rOuter = 135;
+    const rInner = 85;
 
     let start = -Math.PI / 2;
+
+    // Draw Donut Segments
     items.forEach(it => {
         const v = (Number(it.value) || 0);
         const ang = (v / total) * Math.PI * 2;
+
         ctx.beginPath();
-        ctx.moveTo(cx, cy);
-        ctx.arc(cx, cy, r, start, start + ang);
+        // Outer arc
+        ctx.arc(cx, cy, rOuter, start, start + ang);
+        // Inner arc (reverse direction to create hole properly if using fill rules, 
+        // but here we just fill the segment and then can clear the center or draw arcs)
+        // Simpler approach for flat colors: draw pie wedge, then later clear center? 
+        // Better: draw thick strokes or complex paths. 
+        // Let's use the standard "arc to arc" path for a TRUE ring.
+        ctx.arc(cx, cy, rInner, start + ang, start, true);
         ctx.closePath();
+
         ctx.fillStyle = it.color;
         ctx.fill();
+
+        // Optional: small separator
+        ctx.strokeStyle = "rgba(11, 18, 32, 1)";
+        ctx.lineWidth = 4;
+        ctx.stroke();
+
         start += ang;
     });
 
-    // bars + legend (right)
-    const leftX = 320;
-    const topY = 44;
-    const maxV = Math.max(1, ...items.map(i => i.value)) * 1.05;
+    // CENTER TEXT (Total)
+    ctx.fillStyle = "#e5e7eb";
+    ctx.font = "bold 16px system-ui";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("Total", cx, cy - 10);
+
+    ctx.fillStyle = "#9ca3af";
+    ctx.font = "14px system-ui";
+    ctx.fillText(fmtCLP(total), cx, cy + 12);
+
+    // Reset text align
+    ctx.textAlign = "left";
+    ctx.textBaseline = "alphabetic";
+
+
+    // --- BARS + LEGEND (Right side) ---
+    // Adjusted LeftX to 400 (was 320) to make space for bigger chart
+    const leftX = 400;
+    const topY = 44; // Start a bit lower
     const barW = W - leftX - 18;
-    const rowH = 26;
+    const rowH = 26; // Height per row
+
+    // Calculate max value for bar scaling
+    const maxV = Math.max(1, ...items.map(i => i.value)) * 1.05;
+
+    // Sorting by value descending
+    const sortedItems = items.slice().sort((a, b) => b.value - a.value);
+
+    // If too many items, limiting could be considered, but we have height 320.
+    // 320 / 26 ~= 12 items max comfortably. 
 
     ctx.font = "12px system-ui";
-    items.slice().sort((a, b) => b.value - a.value).forEach((it, idx) => {
+
+    sortedItems.forEach((it, idx) => {
         const y = topY + idx * rowH;
+        // Don't draw if it goes out of canvas
+        if (y + rowH > H - 5) return;
+
         const w = (it.value / maxV) * barW;
 
+        // Label
         ctx.fillStyle = "rgba(156,163,175,0.9)";
         ctx.fillText(it.label, leftX, y + 12);
 
+        // Bar Background
         ctx.fillStyle = "rgba(148,163,184,0.18)";
-        roundRect(ctx, leftX, y + 14, barW, 10, 6);
+        roundRect(ctx, leftX, y + 14, barW, 8, 4);
         ctx.fill();
 
+        // Bar Value
         ctx.fillStyle = it.color;
-        roundRect(ctx, leftX, y + 14, w, 10, 6);
+        roundRect(ctx, leftX, y + 14, w, 8, 4);
         ctx.fill();
 
+        // Amount Text (aligned right)
         ctx.fillStyle = "rgba(156,163,175,0.9)";
-        ctx.fillText(fmtCLP(it.value), leftX + barW - 90, y + 12);
+        const txtAmount = fmtCLP(it.value);
+        const txtW = ctx.measureText(txtAmount).width;
+        ctx.fillText(txtAmount, leftX + barW - txtW, y + 12);
     });
 }
 
