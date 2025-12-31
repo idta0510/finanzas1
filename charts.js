@@ -308,38 +308,39 @@ export function drawPieAndBars(canvas, items, title) {
 
 export function palette(i) {
     const colors = [
-        // Azul financiero
-        "rgba(59,130,246,0.95)",
-        "rgba(59,130,246,0.55)",
+        // Azul intenso
+        "rgba(29,78,216,0.95)",
+        "rgba(29,78,216,0.5)",
 
-        // Azul oscuro
-        "rgba(37,99,235,0.95)",
-        "rgba(37,99,235,0.55)",
-
-        // Rojo egresos
+        // Rojo fuerte
         "rgba(220,38,38,0.95)",
-        "rgba(220,38,38,0.55)",
+        "rgba(220,38,38,0.5)",
 
-        // Rojo oscuro
-        "rgba(153,27,27,0.95)",
-        "rgba(153,27,27,0.55)",
-
-        // Naranjo gasto
+        // Naranjo vivo
         "rgba(249,115,22,0.95)",
-        "rgba(249,115,22,0.55)",
+        "rgba(249,115,22,0.5)",
 
-        // Ámbar
-        "rgba(217,119,6,0.95)",
-        "rgba(217,119,6,0.55)",
+        // Morado marcado
+        "rgba(126,34,206,0.95)",
+        "rgba(126,34,206,0.5)",
 
-        // Morado
-        "rgba(139,92,246,0.95)",
-        "rgba(139,92,246,0.55)",
+        // Fucsia / magenta
+        "rgba(219,39,119,0.95)",
+        "rgba(219,39,119,0.5)",
 
-        // Gris financiero
-        "rgba(100,116,139,0.95)",
-        "rgba(100,116,139,0.55)"
+        // Amarillo dorado
+        "rgba(234,179,8,0.95)",
+        "rgba(234,179,8,0.5)",
+
+        // Cian fuerte (no verde)
+        "rgba(14,165,233,0.95)",
+        "rgba(14,165,233,0.5)",
+
+        // Gris oscuro neutro
+        "rgba(71,85,105,0.95)",
+        "rgba(71,85,105,0.5)"
     ];
 
     return colors[i % colors.length];
 }
+
