@@ -344,3 +344,112 @@ export function palette(i) {
     return colors[i % colors.length];
 }
 
+
+export function drawStackedSavings(canvas, labels, income, expense, accum) {
+    const ctx = canvas.getContext("2d");
+    const W = canvas.width, H = canvas.height;
+    clear(ctx, W, H);
+
+    // background
+    ctx.fillStyle = "rgba(2,6,23,0.35)";
+    roundRect(ctx, 0, 0, W, H, 12);
+    ctx.fill();
+
+    const pad = 44;
+    const chartW = W - pad - 16;
+    const chartH = H - pad - 18;
+    const originX = pad;
+    const originY = 12 + chartH;
+
+    // Calculate max value for scaling: Stacked Height = Income + Expense + Abs(Accum)
+    // We stack Income + Expense. Accum is line.
+    // Max should consider the Stacked height (Income + Expense) AND the Accum line (which can be high).
+    const maxStacked = Math.max(1, ...income.map((v, i) => v + expense[i]));
+    const maxAccum = Math.max(0, ...accum.map(v => Math.abs(v)));
+    const yMax = Math.max(maxStacked, maxAccum) * 1.15;
+
+    // axes
+    ctx.strokeStyle = "rgba(148,163,184,0.25)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(originX, 12);
+    ctx.lineTo(originX, originY);
+    ctx.lineTo(originX + chartW, originY);
+    ctx.stroke();
+
+    // y labels (3 ticks)
+    ctx.fillStyle = "rgba(156,163,175,0.9)";
+    ctx.font = "12px system-ui";
+    for (let i = 0; i <= 2; i++) {
+        const t = i / 2;
+        const val = yMax * (1 - t);
+        const y = 12 + chartH * t;
+        ctx.fillText(fmtCLP(val), 8, y + 4);
+
+        ctx.strokeStyle = "rgba(148,163,184,0.10)";
+        ctx.beginPath();
+        ctx.moveTo(originX, y);
+        ctx.lineTo(originX + chartW, y);
+        ctx.stroke();
+    }
+
+    const n = labels.length;
+    const gap = chartW / n;
+
+    // stacked bars
+    for (let i = 0; i < n; i++) {
+        const inc = income[i] || 0;
+        const exp = expense[i] || 0;
+
+        const x = originX + i * gap + gap * 0.18;
+        const bw = gap * 0.64;
+
+        // Draw Expense (Red) at Bottom
+        const hExp = (exp / yMax) * chartH;
+        let yExp = originY - hExp;
+
+        if (exp > 0) {
+            ctx.fillStyle = "rgba(239,68,68,0.75)";
+            roundRect(ctx, x, yExp, bw, hExp, 4);
+            ctx.fill();
+        }
+
+        // Draw Income (Green) on Top of Expense
+        const hInc = (inc / yMax) * chartH;
+        let yInc = yExp - hInc; // Stack on top
+
+        if (inc > 0) {
+            ctx.fillStyle = "rgba(34,197,94,0.75)";
+            roundRect(ctx, x, yInc, bw, hInc, 4);
+            ctx.fill();
+        }
+
+        // month labels (every 2)
+        if (i % 2 === 0) {
+            ctx.fillStyle = "rgba(156,163,175,0.9)";
+            ctx.font = "11px system-ui";
+            ctx.fillText(labels[i], x, originY + 16);
+        }
+    }
+
+    // line (accum)
+    ctx.strokeStyle = "rgba(96,165,250,0.95)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    let started = false;
+    for (let i = 0; i < n; i++) {
+        const v = accum[i] || 0;
+        const x = originX + i * gap + gap * 0.5;
+        const y = originY - (Math.abs(v) / yMax) * chartH;
+
+        // Skip initial zeros if prefer cleaner line? No, show all.
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+
+    // title hint
+    ctx.fillStyle = "rgba(156,163,175,0.9)";
+    ctx.font = "12px system-ui";
+    ctx.fillText("Barras Apiladas: Rojo (Egresos) + Verde (Ingresos) | Línea: Acumulado", originX, 20);
+}

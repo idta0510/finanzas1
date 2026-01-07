@@ -8,7 +8,7 @@ import {
 import { showToast } from "./ui.js";
 
 import {
-    drawBarLineSavings, drawTwoBars, drawPieAndBars, palette
+    drawBarLineSavings, drawTwoBars, drawPieAndBars, palette, drawStackedSavings
 } from "./charts.js";
 
 const monthNames = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
@@ -338,8 +338,10 @@ function drawDashboardCharts(annual, monthSummary) {
     const labelsShort = monthNames.map(m => m.slice(0, 3));
     const savings = annual.map(a => a.saving);
     const accum = annual.map(a => a.accum);
+    const income = annual.map(a => a.income);
+    const expense = annual.map(a => a.expense);
 
-    drawBarLineSavings(chartSavingsByMonth, labelsShort, savings, accum);
+    drawStackedSavings(chartSavingsByMonth, labelsShort, income, expense, accum);
 
     drawTwoBars(
         chartIncomeExpenseMonth,
