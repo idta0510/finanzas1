@@ -16,7 +16,7 @@ const monthKeys = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2,
 
 // Categorías exactas que pediste
 const CATEGORIES = [
-    "Sueldo", "Arriendo", "Transporte", "Luz", "Agua", "Gas",
+    "Sueldo", "Arriendo", "Transporte", "Teléfono", "Luz", "Agua", "Gas",
     "Mercadería", "Hormiga", "Streaming", "Pago CMR", "Ocio", "Gimnasio",
     "ChatGPT", "Spotify", "Ropa",
     "Ahorro", "Otros"
